@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动态组件</title>
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div id="itany">
+		<button @click="flag='my-hello'">显示hello组件</button> <!-- 'my-hello'需要加引号，否则被认为是实例中变量 -->
+		<button @click="flag='my-world'">显示world组件</button>
+
+
+		<div>
+			<!-- 使用keep-alive组件缓存非活动组件，可以保留状态，避免重新渲染，默认每次都会销毁非活动组件并重新创建 -->
+			<!-- vue自带组件，通过is控制显示哪个局部组件，在切换过程中dom 组件每次都会被销毁 ，然后重新创建，渲染，使用keep-alive 缓存旧
+			组件的状态数据，避免每次都向服务器发送请求-->
+			<keep-alive>
+				<component :is="flag"></component>	
+			</keep-alive>
+		</div>
+	</div>
+
+	<script>
+		var vm=new Vue({
+			el:'#itany',
+			data:{
+				flag:'my-hello'
+			},
+			components:{
+				'my-hello':{
+					template:'<h3>我是hello组件：{{x}}</h3>',
+					data(){
+						return {
+							x:Math.random()
+						}
+					}
+				},
+				'my-world':{
+					template:'<h3>我是world组件：{{y}}</h3>',
+					data(){
+						return {
+							y:Math.random()
+						}
+					}
+				}
+			}
+		});	
+	</script>
+</body>
+</html>

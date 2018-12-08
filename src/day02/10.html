@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>动画</title>
+	<script src="js/vue.js"></script>
+	<style>
+		p{  /* 样式选择器不能使用 #itany 否则动画效果没有*/
+			width: 300px;
+			height: 300px;
+			background-color:red;
+		}
+		/* 进入时，和离开时 到结束状态的动画过渡效果*/
+		.fade-enter-active,.fade-leave-active{
+			transition:all 3s ease;   /* all 表示所有属性如宽高，长度等 ，渐变时间3s完成, 时间曲线ease*/
+		}
+		.fade-enter-active{ /*完全显示时最终态设置，透明度慢慢变成 1，宽高变成300 x 300*/
+			opacity:1;   
+			width:300px;
+			height:300px;
+		}
+		.fade-leave-active{  /*隐藏时最终态设置，透明度慢慢变成 0, 宽高变成50px x 50px*/
+			opacity:0;
+			width:50px;
+			height:50px;
+		}
+		/* 设置初始时进入状态时， .fade-enter需要放在.fade-enter-active的后面 ，否则动画没有效果，如果不设置使用p标签原始状态
+		.fade-leave也是不设置使用默认消失前的初始状态*/
+		.fade-enter{
+			opacity:0;
+			width: 100px;
+			height: 100px;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="itany">
+		<button @click="flag=!flag">点我</button>
+		
+		<transition name="fade" 
+			@before-enter="beforeEnter"
+			@enter="enter"
+			@after-enter="afterEnter"
+			@before-leave="beforeLeave"
+			@leave="leave"
+			@after-leave="afterLeave"
+		>
+			<p v-show="flag">网博</p>  <!-- 显示时触发进入动画，离开时触发离开动画 -->
+		</transition>
+	</div>
+
+	<script>
+		var vm=new Vue({
+			el:'#itany',
+			data:{
+				flag:false
+			},
+			methods:{  /* 这些回调函数用于在动画过程中，动态控制其相关属性状态*/
+				beforeEnter(el){
+					// alert('动画进入之前');
+				},
+				enter(){
+					// alert('动画进入，此时没有显示动画');
+				},
+				afterEnter(el){
+					// alert('动画进入之后');
+					el.style.background='blue';  //进入后设置为蓝色
+				},
+				beforeLeave(){
+					// alert('动画即将之前');
+				},
+				leave(){
+					// alert('动画离开，此时没有显示动画');
+				},
+				afterLeave(el){
+					// alert('动画离开之后');
+					el.style.background='red';  //离开时变成红色
+				}
+			}
+		});
+	</script>
+	
+</body>
+</html>

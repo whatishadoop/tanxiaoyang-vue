@@ -1,0 +1,23 @@
+插件也可以看成组件，ui-element就是以插件方式导入使用的
+1.先定义组件Login.vue
+2.创建index.js文件,加入install函数中导出插件
+import Login from './Login.vue'
+
+export default {
+	install:function(Vue){
+		Vue.component('Login',Login);
+	}
+}
+3. 在main.js中注册插件如下
+// 等价于引用 ./components/user/index.js 文件，该文件引入了该目录下所有文件集合
+import Login from './components/user'
+
+Vue.use(Login);
+
+4.在App.vue中使用该插件
+<!--无需import引入，再进行components注册，直接使用-->
+<template>
+  <div id="app">
+    <Login></Login>
+  </div>
+</template>

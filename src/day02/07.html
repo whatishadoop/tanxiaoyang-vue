@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>监视数据的变化：$watch</title>
+	<script src="js/vue.js"></script>
+</head>
+<body>
+	<div id="itany">
+		<input type="text" v-model="name">
+		<h3>{{name}}</h3>
+		<hr>
+		
+		<input type="text" v-model="age">
+		<h3>{{age}}</h3>
+		<hr>
+
+		<input type="text" v-model="user.name">
+		<h3>{{user.name}}</h3>
+	</div>
+
+	<script>
+		var vm=new Vue({
+			el:'#itany',
+			data:{
+				name:'tom',
+				age:23,
+				user:{
+					id:1001,
+					name:'alice'
+				}
+			},
+			watch:{ //方式2：使用vue实例提供的watch选项，默认属于浅监视，只能监视到对象
+				age:(newValue,oldValue) => {   // 这里的age可能是data属性也可能是计算属性，angularjs中也有监视但只是针对对象
+					console.log('age被修改啦，原值：'+oldValue+'，新值：'+newValue);
+				},
+				user:{  // 如下写法表示开启深度监视写法
+					handler:(newValue,oldValue) => {  // 这里传入的是对象user
+						console.log('user被修改啦，原值：'+oldValue.name+'，新值：'+newValue.name); // name原值和新值相同都指向同一个地址
+					},
+					deep:true //深度监视，当对象中的属性发生变化时也会监视
+				}
+			}
+		});
+
+		//方式1：使用vue实例提供的$watch()方法  ，该方法没有全局方法一般只针对vue实例,全局的话不同vue实例具有相同属性时如name则无法判断
+		//深度监视，对于属性只深度和浅度一样， 若是对象，则下面方法需要添加true参数
+		vm.$watch('name',function(newValue,oldValue){
+			console.log('name被修改啦，原值：'+oldValue+'，新值：'+newValue);
+		});   // },true);
+
+	</script>
+	
+</body>
+</html>
